@@ -1,0 +1,6 @@
+<?php
+// Copie para config.local.php (não versionar, não é acessível pela web).
+define('APP_URL', 'https://www.seudominio.com.br');            // sem barra final
+define('STORAGE_DIR', dirname(__DIR__) . '/lindinez_storage'); // FORA do public_html, ex.: /home/usuario/lindinez_storage
+// define('ADMIN_ALLOWED_IPS', ['203.0.113.10']);               // opcional: restringe o painel
+// define('ADMIN_PASSWORD_HASH', '...');                        // opcional: php -r "echo password_hash('SENHA', PASSWORD_DEFAULT);"

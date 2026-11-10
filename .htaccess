@@ -1,0 +1,31 @@
+# Ateliê Lindinez - Apache / cPanel
+Options -Indexes -MultiViews
+DirectoryIndex index.php
+
+# HTTPS obrigatório (ignora localhost)
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+  RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1)(:\d+)?$
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Diretórios internos nunca são servidos
+  RewriteRule ^(src|vendor|tools|tests|storage)(/|$) - [F,L]
+</IfModule>
+
+# Arquivos sensíveis (Apache 2.4 e 2.2)
+<FilesMatch "(^\.|^config.*\.php$|\.(json|lock|md|sqlite|sqlite3|db|log|bak|old|new|example|ini|sh|yml|yaml)$|\.sqlite.*$|\.log\.php$)">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+<IfModule mod_headers.c>
+  Header always set Strict-Transport-Security "max-age=31536000" env=HTTPS
+  Header always set X-Content-Type-Options "nosniff"
+</IfModule>
